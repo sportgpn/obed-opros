@@ -428,10 +428,10 @@
                 <div class="form-group">
                     <label>Фото (необязательно)</label>
                     <div class="file-upload">
-                        <input type="file" id="photo" accept="image/jpeg,image/png,image/jpg">
+                        <input type="file" id="photo" accept="image/jpeg,image/png,image/jpg,image/webp,image/heic,image/heif">
                         <div class="file-upload-label">📸 Выберите фото</div>
                     </div>
-                    <div class="file-info">Максимальный размер после сжатия: 500 КБ</div>
+                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500 КБ</div>
                     <div id="preview"></div>
                 </div>
 
@@ -598,6 +598,7 @@
                     showStatus('✅ Спасибо! Ваш отзыв успешно отправлен', 'success');
                     form.reset();
                     document.getElementById('preview').innerHTML = '';
+                    document.querySelector('.file-upload-label').style.background = '#f0f4ff';
                 } else {
                     showStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
                 }
