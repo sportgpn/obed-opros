@@ -277,6 +277,13 @@
             border: 1px solid #bee5eb;
         }
 
+        /* Стили для капчи */
+        .captcha-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
         @media (max-width: 600px) {
             .form-content {
                 padding: 25px;
@@ -486,6 +493,11 @@
                     <div id="preview"></div>
                 </div>
 
+                <!-- Контейнер для капчи -->
+                <div class="captcha-container">
+                    <div id="captcha-container" class="smart-captcha" data-sitekey="ВАШ_CLIENT_KEY"></div>
+                </div>
+
                 <button type="submit" id="submitBtn">📨 Отправить отзыв</button>
             </form>
 
@@ -493,44 +505,38 @@
         </div>
     </div>
 
-    <!-- SmartCaptcha -->
-    <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha" defer></script>
-    <div id="captcha-container" style="display: none;"></div>
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
 
     <script>
         const form = document.getElementById('feedbackForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusDiv = document.getElementById('status');
-
-        // --- SmartCaptcha ---
-        let captchaWidgetId = null;
+        
         let captchaToken = '';
 
-        function onloadSmartCaptcha() {
-            if (!window.smartCaptcha) return;
-            const container = document.getElementById('captcha-container');
-            captchaWidgetId = window.smartCaptcha.render(container, {
-                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
-                invisible: true,
-                callback: function (token) {
+        // Функция-колбэк для капчи
+        window.onloadFunction = function() {
+            if (window.smartCaptcha) {
+                // Колбэк вызывается при успешном прохождении капчи
+                window.smartCaptcha.subscribe('success', function(token) {
                     captchaToken = token;
-                    if (window.autoSubmitForm) {
-                        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-                    }
-                }
-            });
-        }
-
-        function executeSmartCaptcha(autoSubmit = true) {
-            if (!window.smartCaptcha || captchaWidgetId === null) {
-                console.error('SmartCaptcha не загружена');
-                showStatus('Ошибка загрузки капчи, попробуйте позже', 'error');
-                return false;
+                    console.log('Captcha token received');
+                });
             }
-            window.autoSubmitForm = autoSubmit;
-            window.smartCaptcha.execute(captchaWidgetId);
-            return true;
-        }
+        };
+
+        // Следим за токеном через глобальный колбэк
+        document.addEventListener('DOMContentLoaded', function() {
+            // Альтернативный способ — проверяем каждые 100 мс наличие токена в контейнере
+            const checkTokenInterval = setInterval(function() {
+                const tokenInput = document.querySelector('input[name="smart-token"]');
+                if (tokenInput && tokenInput.value && !captchaToken) {
+                    captchaToken = tokenInput.value;
+                    console.log('Captcha token found in hidden input');
+                    clearInterval(checkTokenInterval);
+                }
+            }, 500);
+        });
 
         // --- Сжатие фото ---
         async function compressImage(file) {
@@ -618,9 +624,9 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Если капча ещё не пройдена — запускаем её
+            // Проверяем наличие токена капчи
             if (!captchaToken) {
-                executeSmartCaptcha(true);
+                showStatus('❌ Пожалуйста, подтвердите, что вы не робот', 'error');
                 return;
             }
 
@@ -696,11 +702,18 @@
                     form.reset();
                     document.getElementById('preview').innerHTML = '';
                     document.querySelector('.file-upload-label').style.background = '#f0f4ff';
-                    captchaToken = ''; // сбрасываем токен для следующей отправки
+                    captchaToken = ''; // сбрасываем токен
+                    // Перезагружаем капчу
+                    if (window.smartCaptcha) {
+                        window.smartCaptcha.reset();
+                    }
                 } else {
                     showStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
                     if (result.error === 'Captcha verification failed') {
-                        captchaToken = ''; // если капча не пройдена, сбрасываем
+                        captchaToken = '';
+                        if (window.smartCaptcha) {
+                            window.smartCaptcha.reset();
+                        }
                     }
                 }
             } catch (error) {
