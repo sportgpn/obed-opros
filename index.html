@@ -88,7 +88,9 @@
             margin-left: 4px;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
@@ -99,7 +101,9 @@
             background: #fafafa;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #2a5298;
             background: white;
@@ -139,7 +143,7 @@
             color: #555;
         }
 
-        .rating-option input:checked + label {
+        .rating-option input:checked+label {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             transform: scale(1.02);
@@ -277,13 +281,16 @@
             .form-content {
                 padding: 25px;
             }
+
             .rating-group {
                 gap: 8px;
             }
+
             .rating-option label {
                 font-size: 12px;
                 padding: 8px;
             }
+
             .header h1 {
                 font-size: 22px;
             }
@@ -296,7 +303,8 @@
         <div class="header">
             <h1>🍽️ Анонимный отзыв о питании</h1>
             <div class="welcome">
-                👋 Привет! Мы постоянно работаем над улучшением качества корпоративного питания. Поделитесь, пожалуйста, вашим мнением о недавнем обеде — это займет всего 2-3 минуты.
+                👋 Привет! Мы постоянно работаем над улучшением качества корпоративного питания. Поделитесь, пожалуйста,
+                вашим мнением о недавнем обеде — это займет всего 2-3 минуты.
             </div>
         </div>
 
@@ -330,99 +338,141 @@
                 <div class="form-group">
                     <label>Оцените вкус блюд? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="taste" id="taste1" value="1"><label for="taste1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste2" value="2"><label for="taste2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste3" value="3"><label for="taste3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste4" value="4"><label for="taste4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste5" value="5"><label for="taste5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste1" value="1"><label
+                                for="taste1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste2" value="2"><label
+                                for="taste2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste3" value="3"><label
+                                for="taste3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste4" value="4"><label
+                                for="taste4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste5" value="5"><label
+                                for="taste5">5</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Насколько аппетитно выглядели блюда? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance1" value="1"><label for="appearance1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance2" value="2"><label for="appearance2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance3" value="3"><label for="appearance3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance4" value="4"><label for="appearance4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance5" value="5"><label for="appearance5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance1"
+                                value="1"><label for="appearance1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance2"
+                                value="2"><label for="appearance2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance3"
+                                value="3"><label for="appearance3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance4"
+                                value="4"><label for="appearance4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance5"
+                                value="5"><label for="appearance5">5</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Насколько вы были сыты? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness1" value="1"><label for="fullness1">1 - Совсем не наелся</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness2" value="2"><label for="fullness2">2 - Еле-еле</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness3" value="3"><label for="fullness3">3 - Нормально</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness4" value="4"><label for="fullness4">4 - Сыт</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness5" value="5"><label for="fullness5">5 - Объема было более чем достаточно</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness1" value="1"><label
+                                for="fullness1">1 - Совсем не наелся</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness2" value="2"><label
+                                for="fullness2">2 - Еле-еле</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness3" value="3"><label
+                                for="fullness3">3 - Нормально</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness4" value="4"><label
+                                for="fullness4">4 - Сыт</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness5" value="5"><label
+                                for="fullness5">5 - Объема было более чем достаточно</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Оцените разнообразие меню? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="variety" id="variety1" value="1"><label for="variety1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety2" value="2"><label for="variety2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety3" value="3"><label for="variety3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety4" value="4"><label for="variety4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety5" value="5"><label for="variety5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety1" value="1"><label
+                                for="variety1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety2" value="2"><label
+                                for="variety2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety3" value="3"><label
+                                for="variety3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety4" value="4"><label
+                                for="variety4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety5" value="5"><label
+                                for="variety5">5</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Насколько упаковка была удобной для приема пищи? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging1" value="1"><label for="packaging1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging2" value="2"><label for="packaging2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging3" value="3"><label for="packaging3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging4" value="4"><label for="packaging4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging5" value="5"><label for="packaging5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging1" value="1"><label
+                                for="packaging1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging2" value="2"><label
+                                for="packaging2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging3" value="3"><label
+                                for="packaging3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging4" value="4"><label
+                                for="packaging4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging5" value="5"><label
+                                for="packaging5">5</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Упаковка была герметичной, ничего не протекало? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="leak" id="leak1" value="Да, всё в порядке"><label for="leak1">Да, всё в порядке</label></div>
-                        <div class="radio-option"><input type="radio" name="leak" id="leak2" value="нет, была течь"><label for="leak2">Нет, была течь</label></div>
-                        <div class="radio-option"><input type="radio" name="leak" id="leak3" value="Не применимо"><label for="leak3">Не применимо</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak1"
+                                value="Да, всё в порядке"><label for="leak1">Да, всё в порядке</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak2"
+                                value="нет, была течь"><label for="leak2">Нет, была течь</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak3"
+                                value="Не применимо"><label for="leak3">Не применимо</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Информация на упаковке была читаемой и полной? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo1" value="Да"><label for="labelInfo1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo2" value="Нет, чего-то не хватало"><label for="labelInfo2">Нет, чего-то не хватало</label></div>
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo3" value="Не смотрел(ла)"><label for="labelInfo3">Не смотрел(ла)</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo1" value="Да"><label
+                                for="labelInfo1">Да</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo2"
+                                value="Нет, чего-то не хватало"><label for="labelInfo2">Нет, чего-то не
+                                хватало</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo3"
+                                value="Не смотрел(ла)"><label for="labelInfo3">Не смотрел(ла)</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Ваше общее впечатление от программы корпоративного питания в целом? <span class="required">*</span></label>
+                    <label>Ваше общее впечатление от программы корпоративного питания в целом? <span
+                            class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="overall" id="overall1" value="1"><label for="overall1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall2" value="2"><label for="overall2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall3" value="3"><label for="overall3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall4" value="4"><label for="overall4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall5" value="5"><label for="overall5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall1" value="1"><label
+                                for="overall1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall2" value="2"><label
+                                for="overall2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall3" value="3"><label
+                                for="overall3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall4" value="4"><label
+                                for="overall4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall5" value="5"><label
+                                for="overall5">5</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Порекомендовали бы вы это питание коллеге? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label for="recommend1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2" value="Нет"><label for="recommend2">Нет</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend3" value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label
+                                for="recommend1">Да</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2" value="Нет"><label
+                                for="recommend2">Нет</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend3"
+                                value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Ваш комментарий (подробности, пожелания) <span class="required">*</span></label>
-                    <textarea id="comment" rows="4" required placeholder="Расскажите подробнее о вашем опыте, пожелания, замечания..."></textarea>
+                    <textarea id="comment" rows="4" required
+                        placeholder="Расскажите подробнее о вашем опыте, пожелания, замечания..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -431,7 +481,8 @@
                         <input type="file" id="photo" accept="image/jpeg,image/png,image/jpg,image/webp,image/heic,image/heif">
                         <div class="file-upload-label">📸 Выберите фото</div>
                     </div>
-                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500 КБ</div>
+                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500
+                        КБ</div>
                     <div id="preview"></div>
                 </div>
 
@@ -442,11 +493,46 @@
         </div>
     </div>
 
+    <!-- SmartCaptcha -->
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha" defer></script>
+    <div id="captcha-container" style="display: none;"></div>
+
     <script>
         const form = document.getElementById('feedbackForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusDiv = document.getElementById('status');
 
+        // --- SmartCaptcha ---
+        let captchaWidgetId = null;
+        let captchaToken = '';
+
+        function onloadSmartCaptcha() {
+            if (!window.smartCaptcha) return;
+            const container = document.getElementById('captcha-container');
+            captchaWidgetId = window.smartCaptcha.render(container, {
+                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
+                invisible: true,
+                callback: function (token) {
+                    captchaToken = token;
+                    if (window.autoSubmitForm) {
+                        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                    }
+                }
+            });
+        }
+
+        function executeSmartCaptcha(autoSubmit = true) {
+            if (!window.smartCaptcha || captchaWidgetId === null) {
+                console.error('SmartCaptcha не загружена');
+                showStatus('Ошибка загрузки капчи, попробуйте позже', 'error');
+                return false;
+            }
+            window.autoSubmitForm = autoSubmit;
+            window.smartCaptcha.execute(captchaWidgetId);
+            return true;
+        }
+
+        // --- Сжатие фото ---
         async function compressImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -493,6 +579,7 @@
             });
         }
 
+        // --- Предпросмотр фото ---
         document.getElementById('photo').addEventListener('change', (e) => {
             const file = e.target.files[0];
             const preview = document.getElementById('preview');
@@ -515,6 +602,7 @@
             }
         });
 
+        // --- Показ статуса ---
         function showStatus(message, type) {
             statusDiv.textContent = message;
             statusDiv.className = type;
@@ -526,8 +614,16 @@
             }, 5000);
         }
 
+        // --- Отправка формы ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Если капча ещё не пройдена — запускаем её
+            if (!captchaToken) {
+                executeSmartCaptcha(true);
+                return;
+            }
+
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Отправка...';
             statusDiv.style.display = 'none';
@@ -581,7 +677,8 @@
                     overall: parseInt(overall.value),
                     recommend: recommend.value,
                     comment,
-                    photoBase64
+                    photoBase64,
+                    captchaToken: captchaToken
                 };
 
                 showStatus('📡 Отправка данных...', 'info');
@@ -599,8 +696,12 @@
                     form.reset();
                     document.getElementById('preview').innerHTML = '';
                     document.querySelector('.file-upload-label').style.background = '#f0f4ff';
+                    captchaToken = ''; // сбрасываем токен для следующей отправки
                 } else {
                     showStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
+                    if (result.error === 'Captcha verification failed') {
+                        captchaToken = ''; // если капча не пройдена, сбрасываем
+                    }
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
