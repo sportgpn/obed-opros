@@ -34,6 +34,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -339,7 +340,7 @@
 
                 <div class="form-group">
                     <label>Площадка (объект питания) <span class="required">*</span></label>
-                    <input type="text" id="place" required placeholder="Например: Столовая на ул. Ленина">
+                    <input type="text" id="place" required placeholder="Например: НБ Гладкое">
                 </div>
 
                 <div class="form-group">
@@ -434,8 +435,8 @@
                                 value="Да, всё в порядке"><label for="leak1">Да, всё в порядке</label></div>
                         <div class="radio-option"><input type="radio" name="leak" id="leak2"
                                 value="нет, была течь"><label for="leak2">Нет, была течь</label></div>
-                        <div class="radio-option"><input type="radio" name="leak" id="leak3"
-                                value="Не применимо"><label for="leak3">Не применимо</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak3" value="Не применимо"><label
+                                for="leak3">Не применимо</label></div>
                     </div>
                 </div>
 
@@ -474,8 +475,8 @@
                     <div class="radio-group">
                         <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label
                                 for="recommend1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2" value="Нет"><label
-                                for="recommend2">Нет</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2"
+                                value="Нет"><label for="recommend2">Нет</label></div>
                         <div class="radio-option"><input type="radio" name="recommend" id="recommend3"
                                 value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
                     </div>
@@ -490,10 +491,12 @@
                 <div class="form-group">
                     <label>Фото (необязательно)</label>
                     <div class="file-upload">
-                        <input type="file" id="photo" accept="image/jpeg,image/png,image/jpg,image/webp,image/heic,image/heif">
+                        <input type="file" id="photo"
+                            accept="image/jpeg,image/png,image/jpg,image/webp,image/heic,image/heif">
                         <div class="file-upload-label">📸 Выберите фото</div>
                     </div>
-                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500
+                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после
+                        сжатия: 500
                         КБ</div>
                     <div id="preview"></div>
                 </div>
@@ -509,7 +512,8 @@
         </div>
     </div>
 
-    <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha" defer></script>
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha"
+        defer></script>
     <script>
         // ---------- НЕВИДИМАЯ КАПЧА ----------
         let captchaWidgetId = null;
@@ -520,9 +524,9 @@
             if (!window.smartCaptcha) return;
             const container = document.getElementById('captcha-container');
             captchaWidgetId = window.smartCaptcha.render(container, {
-                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba', // ЗАМЕНИТЕ НА ВАШ CLIENT KEY
+                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
                 invisible: true,
-                callback: function(token) {
+                callback: function (token) {
                     captchaToken = token;
                     if (!isFormSubmitting) {
                         isFormSubmitting = true;
@@ -534,22 +538,22 @@
 
         function handleFormSubmit(event) {
             event.preventDefault();
-            
+
             // Проверяем, не отправлена ли уже форма
             if (isFormSubmitting) {
                 return;
             }
-            
+
             if (!window.smartCaptcha || captchaWidgetId === null) {
                 showTemporaryStatus('❌ Ошибка загрузки капчи, попробуйте позже', 'error');
                 return;
             }
-            
+
             // Проверяем обязательные поля перед запуском капчи
             if (!validateRequiredFields()) {
                 return;
             }
-            
+
             window.smartCaptcha.execute(captchaWidgetId);
         }
 
@@ -601,7 +605,7 @@
                 </div>
             `;
             successDiv.style.display = 'block';
-            
+
             // Скрываем временное статусное сообщение
             const statusDiv = document.getElementById('status');
             statusDiv.style.display = 'none';
@@ -736,16 +740,16 @@
                     const reviewNumber = result.reviewNumber || '—';
                     // Показываем постоянное сообщение об успехе
                     showPermanentSuccess('Спасибо! Ваш отзыв успешно отправлен', reviewNumber);
-                    
+
                     // Очищаем форму
                     form.reset();
                     document.getElementById('preview').innerHTML = '';
                     document.querySelector('.file-upload-label').style.background = '#f0f4ff';
-                    
+
                     // Блокируем кнопку навсегда после успешной отправки
                     submitBtn.disabled = true;
                     submitBtn.textContent = '✓ Отправлено';
-                    
+
                     // Сбрасываем капчу
                     captchaToken = '';
                     if (window.smartCaptcha && captchaWidgetId !== null) {
