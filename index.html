@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Анонимный отзыв о питании</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ——— Ваши стили (оставлены без изменений) ——— */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 40px 20px;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -28,34 +22,17 @@
             overflow: hidden;
             animation: fadeIn 0.5s ease-out;
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         .header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             padding: 30px;
             text-align: center;
             color: white;
         }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
+        .header h1 { font-size: 28px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .header .welcome {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 12px;
@@ -64,33 +41,11 @@
             font-size: 15px;
             line-height: 1.5;
         }
-
-        .form-content {
-            padding: 40px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #1e3c72;
-            font-size: 15px;
-        }
-
-        .required {
-            color: #e74c3c;
-            margin-left: 4px;
-        }
-
-        input,
-        select,
-        textarea {
+        .form-content { padding: 40px; }
+        .form-group { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; color: #1e3c72; font-size: 15px; }
+        .required { color: #e74c3c; margin-left: 4px; }
+        input, select, textarea {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
@@ -100,37 +55,16 @@
             transition: all 0.3s ease;
             background: #fafafa;
         }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #2a5298;
             background: white;
             box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .rating-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .rating-option {
-            flex: 1;
-            text-align: center;
-            min-width: 50px;
-        }
-
-        .rating-option input {
-            display: none;
-        }
-
+        textarea { resize: vertical; min-height: 100px; }
+        .rating-group { display: flex; gap: 15px; flex-wrap: wrap; }
+        .rating-option { flex: 1; text-align: center; min-width: 50px; }
+        .rating-option input { display: none; }
         .rating-option label {
             display: block;
             padding: 10px;
@@ -142,50 +76,17 @@
             font-weight: normal;
             color: #555;
         }
-
-        .rating-option input:checked+label {
+        .rating-option input:checked + label {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             transform: scale(1.02);
         }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .radio-option input {
-            width: auto;
-            margin: 0;
-        }
-
-        .radio-option label {
-            margin: 0;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        .file-upload {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-upload input[type="file"] {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
+        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
+        .radio-option { display: flex; align-items: center; gap: 8px; }
+        .radio-option input { width: auto; margin: 0; }
+        .radio-option label { margin: 0; font-weight: normal; cursor: pointer; }
+        .file-upload { position: relative; display: inline-block; width: 100%; }
+        .file-upload input[type="file"] { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .file-upload-label {
             display: flex;
             align-items: center;
@@ -200,32 +101,10 @@
             color: #2a5298;
             font-weight: 500;
         }
-
-        .file-upload-label:hover {
-            background: #e8efff;
-            border-color: #1e3c72;
-        }
-
-        .file-info {
-            font-size: 12px;
-            color: #888;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        #preview {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        #preview img {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            object-fit: cover;
-        }
-
+        .file-upload-label:hover { background: #e8efff; border-color: #1e3c72; }
+        .file-info { font-size: 12px; color: #888; margin-top: 8px; text-align: center; }
+        #preview { margin-top: 15px; text-align: center; }
+        #preview img { max-width: 150px; max-height: 150px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); object-fit: cover; }
         button {
             width: 100%;
             padding: 14px;
@@ -239,18 +118,8 @@
             transition: all 0.3s ease;
             margin-top: 10px;
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
-        }
-
-        button:disabled {
-            background: #ccc;
-            transform: none;
-            cursor: not-allowed;
-        }
-
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3); }
+        button:disabled { background: #ccc; transform: none; cursor: not-allowed; }
         #status {
             margin-top: 20px;
             padding: 12px 16px;
@@ -258,65 +127,28 @@
             display: none;
             font-weight: 500;
         }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        /* Стили для капчи */
-        .captcha-container {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-        }
-
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
         @media (max-width: 600px) {
-            .form-content {
-                padding: 25px;
-            }
-
-            .rating-group {
-                gap: 8px;
-            }
-
-            .rating-option label {
-                font-size: 12px;
-                padding: 8px;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
+            .form-content { padding: 25px; }
+            .rating-group { gap: 8px; }
+            .rating-option label { font-size: 12px; padding: 8px; }
+            .header h1 { font-size: 22px; }
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="header">
             <h1>🍽️ Анонимный отзыв о питании</h1>
             <div class="welcome">
-                👋 Привет! Мы постоянно работаем над улучшением качества корпоративного питания. Поделитесь, пожалуйста,
-                вашим мнением о недавнем обеде — это займет всего 2-3 минуты.
+                👋 Привет! Мы постоянно работаем над улучшением качества корпоративного питания. Поделитесь, пожалуйста, вашим мнением о недавнем обеде — это займет всего 2-3 минуты.
             </div>
         </div>
-
         <div class="form-content">
             <form id="feedbackForm">
+                <!-- все поля формы (как ранее, без изменений) -->
                 <div class="form-group">
                     <label>Регион <span class="required">*</span></label>
                     <select id="region" required>
@@ -326,219 +158,177 @@
                         <option value="Сибирь">Сибирь</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Город <span class="required">*</span></label>
                     <input type="text" id="city" required placeholder="Например: Москва">
                 </div>
-
                 <div class="form-group">
                     <label>Площадка (объект питания) <span class="required">*</span></label>
                     <input type="text" id="place" required placeholder="Например: Столовая на ул. Ленина">
                 </div>
-
                 <div class="form-group">
                     <label>Когда вы получили обед? <span class="required">*</span></label>
                     <input type="date" id="date" required>
                 </div>
-
+                <!-- Вкус -->
                 <div class="form-group">
                     <label>Оцените вкус блюд? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="taste" id="taste1" value="1"><label
-                                for="taste1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste2" value="2"><label
-                                for="taste2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste3" value="3"><label
-                                for="taste3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste4" value="4"><label
-                                for="taste4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="taste" id="taste5" value="5"><label
-                                for="taste5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste1" value="1"><label for="taste1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste2" value="2"><label for="taste2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste3" value="3"><label for="taste3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste4" value="4"><label for="taste4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="taste" id="taste5" value="5"><label for="taste5">5</label></div>
                     </div>
                 </div>
-
+                <!-- Аппетитность -->
                 <div class="form-group">
                     <label>Насколько аппетитно выглядели блюда? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance1"
-                                value="1"><label for="appearance1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance2"
-                                value="2"><label for="appearance2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance3"
-                                value="3"><label for="appearance3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance4"
-                                value="4"><label for="appearance4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="appearance" id="appearance5"
-                                value="5"><label for="appearance5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance1" value="1"><label for="appearance1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance2" value="2"><label for="appearance2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance3" value="3"><label for="appearance3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance4" value="4"><label for="appearance4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="appearance" id="appearance5" value="5"><label for="appearance5">5</label></div>
                     </div>
                 </div>
-
+                <!-- Сытость -->
                 <div class="form-group">
                     <label>Насколько вы были сыты? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness1" value="1"><label
-                                for="fullness1">1 - Совсем не наелся</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness2" value="2"><label
-                                for="fullness2">2 - Еле-еле</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness3" value="3"><label
-                                for="fullness3">3 - Нормально</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness4" value="4"><label
-                                for="fullness4">4 - Сыт</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness5" value="5"><label
-                                for="fullness5">5 - Объема было более чем достаточно</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness1" value="1"><label for="fullness1">1 - Совсем не наелся</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness2" value="2"><label for="fullness2">2 - Еле-еле</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness3" value="3"><label for="fullness3">3 - Нормально</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness4" value="4"><label for="fullness4">4 - Сыт</label></div>
+                        <div class="rating-option"><input type="radio" name="fullness" id="fullness5" value="5"><label for="fullness5">5 - Объема было более чем достаточно</label></div>
                     </div>
                 </div>
-
+                <!-- Разнообразие -->
                 <div class="form-group">
                     <label>Оцените разнообразие меню? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="variety" id="variety1" value="1"><label
-                                for="variety1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety2" value="2"><label
-                                for="variety2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety3" value="3"><label
-                                for="variety3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety4" value="4"><label
-                                for="variety4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="variety" id="variety5" value="5"><label
-                                for="variety5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety1" value="1"><label for="variety1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety2" value="2"><label for="variety2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety3" value="3"><label for="variety3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety4" value="4"><label for="variety4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="variety" id="variety5" value="5"><label for="variety5">5</label></div>
                     </div>
                 </div>
-
+                <!-- Упаковка удобство -->
                 <div class="form-group">
                     <label>Насколько упаковка была удобной для приема пищи? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging1" value="1"><label
-                                for="packaging1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging2" value="2"><label
-                                for="packaging2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging3" value="3"><label
-                                for="packaging3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging4" value="4"><label
-                                for="packaging4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="packaging" id="packaging5" value="5"><label
-                                for="packaging5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging1" value="1"><label for="packaging1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging2" value="2"><label for="packaging2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging3" value="3"><label for="packaging3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging4" value="4"><label for="packaging4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="packaging" id="packaging5" value="5"><label for="packaging5">5</label></div>
                     </div>
                 </div>
-
+                <!-- Герметичность -->
                 <div class="form-group">
                     <label>Упаковка была герметичной, ничего не протекало? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="leak" id="leak1"
-                                value="Да, всё в порядке"><label for="leak1">Да, всё в порядке</label></div>
-                        <div class="radio-option"><input type="radio" name="leak" id="leak2"
-                                value="нет, была течь"><label for="leak2">Нет, была течь</label></div>
-                        <div class="radio-option"><input type="radio" name="leak" id="leak3"
-                                value="Не применимо"><label for="leak3">Не применимо</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak1" value="Да, всё в порядке"><label for="leak1">Да, всё в порядке</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak2" value="нет, была течь"><label for="leak2">Нет, была течь</label></div>
+                        <div class="radio-option"><input type="radio" name="leak" id="leak3" value="Не применимо"><label for="leak3">Не применимо</label></div>
                     </div>
                 </div>
-
+                <!-- Информация на упаковке -->
                 <div class="form-group">
                     <label>Информация на упаковке была читаемой и полной? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo1" value="Да"><label
-                                for="labelInfo1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo2"
-                                value="Нет, чего-то не хватало"><label for="labelInfo2">Нет, чего-то не
-                                хватало</label></div>
-                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo3"
-                                value="Не смотрел(ла)"><label for="labelInfo3">Не смотрел(ла)</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo1" value="Да"><label for="labelInfo1">Да</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo2" value="Нет, чего-то не хватало"><label for="labelInfo2">Нет, чего-то не хватало</label></div>
+                        <div class="radio-option"><input type="radio" name="labelInfo" id="labelInfo3" value="Не смотрел(ла)"><label for="labelInfo3">Не смотрел(ла)</label></div>
                     </div>
                 </div>
-
+                <!-- Общее впечатление -->
                 <div class="form-group">
-                    <label>Ваше общее впечатление от программы корпоративного питания в целом? <span
-                            class="required">*</span></label>
+                    <label>Ваше общее впечатление от программы корпоративного питания в целом? <span class="required">*</span></label>
                     <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="overall" id="overall1" value="1"><label
-                                for="overall1">1</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall2" value="2"><label
-                                for="overall2">2</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall3" value="3"><label
-                                for="overall3">3</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall4" value="4"><label
-                                for="overall4">4</label></div>
-                        <div class="rating-option"><input type="radio" name="overall" id="overall5" value="5"><label
-                                for="overall5">5</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall1" value="1"><label for="overall1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall2" value="2"><label for="overall2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall3" value="3"><label for="overall3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall4" value="4"><label for="overall4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="overall" id="overall5" value="5"><label for="overall5">5</label></div>
                     </div>
                 </div>
-
+                <!-- Рекомендация -->
                 <div class="form-group">
                     <label>Порекомендовали бы вы это питание коллеге? <span class="required">*</span></label>
                     <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label
-                                for="recommend1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2" value="Нет"><label
-                                for="recommend2">Нет</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend3"
-                                value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label for="recommend1">Да</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2" value="Нет"><label for="recommend2">Нет</label></div>
+                        <div class="radio-option"><input type="radio" name="recommend" id="recommend3" value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
                     </div>
                 </div>
-
+                <!-- Комментарий -->
                 <div class="form-group">
                     <label>Ваш комментарий (подробности, пожелания) <span class="required">*</span></label>
-                    <textarea id="comment" rows="4" required
-                        placeholder="Расскажите подробнее о вашем опыте, пожелания, замечания..."></textarea>
+                    <textarea id="comment" rows="4" required placeholder="Расскажите подробнее о вашем опыте, пожелания, замечания..."></textarea>
                 </div>
-
+                <!-- Фото -->
                 <div class="form-group">
                     <label>Фото (необязательно)</label>
                     <div class="file-upload">
                         <input type="file" id="photo" accept="image/jpeg,image/png,image/jpg,image/webp,image/heic,image/heif">
                         <div class="file-upload-label">📸 Выберите фото</div>
                     </div>
-                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500
-                        КБ</div>
+                    <div class="file-info">Поддерживаемые форматы: JPG, PNG, WebP, HEIC. Максимальный размер после сжатия: 500 КБ</div>
                     <div id="preview"></div>
                 </div>
 
-                <!-- Контейнер для капчи -->
-                <div class="captcha-container">
-                    <div id="captcha-container" class="smart-captcha" data-sitekey="ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba"></div>
-                </div>
+                <!-- КОНТЕЙНЕР ДЛЯ НЕВИДИМОЙ КАПЧИ (скрыт) -->
+                <div id="captcha-container" style="position: absolute; visibility: hidden;"></div>
 
-                <button type="submit" id="submitBtn">📨 Отправить отзыв</button>
+                <button type="button" id="submitBtn">📨 Отправить отзыв</button>
             </form>
-
             <div id="status"></div>
         </div>
     </div>
 
-    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
-
+    <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha" defer></script>
     <script>
+        // ---------- НЕВИДИМАЯ КАПЧА (расширенный метод) ----------
+        let captchaWidgetId = null;
+        let captchaToken = '';
+        let isFormSubmitting = false;
+
+        function onloadSmartCaptcha() {
+            if (!window.smartCaptcha) return;
+            const container = document.getElementById('captcha-container');
+            captchaWidgetId = window.smartCaptcha.render(container, {
+                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
+                invisible: true,   // главный параметр — невидимая капча
+                callback: function(token) {
+                    captchaToken = token;
+                    // После получения токена отправляем форму
+                    if (!isFormSubmitting) {
+                        isFormSubmitting = true;
+                        submitFormToServer();
+                    }
+                }
+            });
+        }
+
+        // Функция, которая будет вызвана при клике на кнопку отправки
+        function handleFormSubmit(event) {
+            event.preventDefault();   // отменяем стандартную отправку
+            if (!window.smartCaptcha || captchaWidgetId === null) {
+                showStatus('❌ Ошибка загрузки капчи, попробуйте позже', 'error');
+                return;
+            }
+            // Запускаем невидимую проверку капчи
+            window.smartCaptcha.execute(captchaWidgetId);
+        }
+
+        // ---------- ОСТАЛЬНОЙ КОД (сбор данных, сжатие фото, отправка на бэкенд) ----------
         const form = document.getElementById('feedbackForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusDiv = document.getElementById('status');
-        
-        let captchaToken = '';
 
-        // Функция-колбэк для капчи
-        window.onloadFunction = function() {
-            if (window.smartCaptcha) {
-                // Колбэк вызывается при успешном прохождении капчи
-                window.smartCaptcha.subscribe('success', function(token) {
-                    captchaToken = token;
-                    console.log('Captcha token received');
-                });
-            }
-        };
-
-        // Следим за токеном через глобальный колбэк
-        document.addEventListener('DOMContentLoaded', function() {
-            // Альтернативный способ — проверяем каждые 100 мс наличие токена в контейнере
-            const checkTokenInterval = setInterval(function() {
-                const tokenInput = document.querySelector('input[name="smart-token"]');
-                if (tokenInput && tokenInput.value && !captchaToken) {
-                    captchaToken = tokenInput.value;
-                    console.log('Captcha token found in hidden input');
-                    clearInterval(checkTokenInterval);
-                }
-            }, 500);
-        });
-
-        // --- Сжатие фото ---
+        // Сжатие фото (без изменений)
         async function compressImage(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -548,10 +338,8 @@
                     img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
+                        let width = img.width, height = img.height;
                         const maxDim = 1024;
-
                         if (width > height && width > maxDim) {
                             height = (height * maxDim) / width;
                             width = maxDim;
@@ -559,17 +347,14 @@
                             width = (width * maxDim) / height;
                             height = maxDim;
                         }
-
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-
                         let quality = 0.9;
                         const tryCompress = () => {
                             const dataUrl = canvas.toDataURL('image/jpeg', quality);
                             const fileSizeKB = Math.round((dataUrl.length * 3 / 4) / 1024);
-
                             if (fileSizeKB <= 500 || quality <= 0.2) {
                                 resolve(dataUrl);
                             } else {
@@ -585,12 +370,11 @@
             });
         }
 
-        // --- Предпросмотр фото ---
+        // Предпросмотр фото
         document.getElementById('photo').addEventListener('change', (e) => {
             const file = e.target.files[0];
             const preview = document.getElementById('preview');
             const label = document.querySelector('.file-upload-label');
-
             if (file) {
                 if (!file.type.match('image.*')) {
                     preview.innerHTML = '<p style="color: #e74c3c;">Пожалуйста, выберите изображение</p>';
@@ -608,32 +392,17 @@
             }
         });
 
-        // --- Показ статуса ---
         function showStatus(message, type) {
             statusDiv.textContent = message;
             statusDiv.className = type;
             statusDiv.style.display = 'block';
             setTimeout(() => {
-                if (type !== 'error') {
-                    statusDiv.style.display = 'none';
-                }
+                if (type !== 'error') statusDiv.style.display = 'none';
             }, 5000);
         }
 
-        // --- Отправка формы ---
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Проверяем наличие токена капчи
-            if (!captchaToken) {
-                showStatus('❌ Пожалуйста, подтвердите, что вы не робот', 'error');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Отправка...';
-            statusDiv.style.display = 'none';
-
+        // Основная отправка данных на ваш бэкенд
+        async function submitFormToServer() {
             try {
                 const region = document.getElementById('region').value;
                 const city = document.getElementById('city').value.trim();
@@ -653,6 +422,7 @@
 
                 if (!region || !city || !place || !date || !taste || !appearance || !fullness || !variety || !packaging || !leak || !labelInfo || !overall || !recommend || !comment) {
                     showStatus('❌ Пожалуйста, заполните все обязательные поля', 'error');
+                    isFormSubmitting = false;
                     submitBtn.disabled = false;
                     submitBtn.textContent = '📨 Отправить отзыв';
                     return;
@@ -665,6 +435,7 @@
                         photoBase64 = await compressImage(photoFile);
                     } catch (err) {
                         showStatus('❌ Ошибка при обработке фото', 'error');
+                        isFormSubmitting = false;
                         submitBtn.disabled = false;
                         submitBtn.textContent = '📨 Отправить отзыв';
                         return;
@@ -702,17 +473,17 @@
                     form.reset();
                     document.getElementById('preview').innerHTML = '';
                     document.querySelector('.file-upload-label').style.background = '#f0f4ff';
-                    captchaToken = ''; // сбрасываем токен
-                    // Перезагружаем капчу
-                    if (window.smartCaptcha) {
-                        window.smartCaptcha.reset();
+                    // Сброс капчи для следующей отправки
+                    captchaToken = '';
+                    if (window.smartCaptcha && captchaWidgetId !== null) {
+                        window.smartCaptcha.reset(captchaWidgetId);
                     }
                 } else {
                     showStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
                     if (result.error === 'Captcha verification failed') {
                         captchaToken = '';
-                        if (window.smartCaptcha) {
-                            window.smartCaptcha.reset();
+                        if (window.smartCaptcha && captchaWidgetId !== null) {
+                            window.smartCaptcha.reset(captchaWidgetId);
                         }
                     }
                 }
@@ -720,11 +491,14 @@
                 console.error('Ошибка:', error);
                 showStatus('❌ Ошибка соединения. Проверьте интернет и попробуйте снова', 'error');
             } finally {
+                isFormSubmitting = false;
                 submitBtn.disabled = false;
                 submitBtn.textContent = '📨 Отправить отзыв';
             }
-        });
+        }
+
+        // Привязываем обработчик к кнопке (тип button, чтобы не вызывать submit формы)
+        submitBtn.addEventListener('click', handleFormSubmit);
     </script>
 </body>
-
 </html>
