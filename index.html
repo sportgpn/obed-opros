@@ -576,74 +576,144 @@
     <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha"
         defer></script>
     <script>
+    // Включаем подробное логирование
+    const DEBUG = true;
+    
+    function log(message, data = null) {
+        if (!DEBUG) return;
+        const timestamp = new Date().toLocaleTimeString();
+        if (data) {
+            console.log(`[${timestamp}] ${message}`, data);
+        } else {
+            console.log(`[${timestamp}] ${message}`);
+        }
+    }
+
+    function logError(message, error = null) {
+        const timestamp = new Date().toLocaleTimeString();
+        if (error) {
+            console.error(`[${timestamp}] ❌ ${message}`, error);
+        } else {
+            console.error(`[${timestamp}] ❌ ${message}`);
+        }
+    }
+
+    function logSuccess(message) {
+        const timestamp = new Date().toLocaleTimeString();
+        console.log(`[${timestamp}] ✅ ${message}`);
+    }
+
     let captchaWidgetId = null;
     let captchaToken = '';
     let isFormSubmitting = false;
 
     function onloadSmartCaptcha() {
-        if (!window.smartCaptcha) return;
+        log('SmartCaptcha загружена');
+        if (!window.smartCaptcha) {
+            logError('window.smartCaptcha не доступна');
+            return;
+        }
         const container = document.getElementById('captcha-container');
+        log('Рендерим капчу в контейнер', container);
+        
         captchaWidgetId = window.smartCaptcha.render(container, {
             sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
             invisible: true,
             callback: function (token) {
+                log('Получен токен капчи', { tokenLength: token.length, tokenPreview: token.substring(0, 20) + '...' });
                 captchaToken = token;
                 if (isFormSubmitting) {
+                    log('Запускаем отправку формы после получения токена');
                     submitFormToServer();
+                } else {
+                    logError('Токен получен, но isFormSubmitting = false');
                 }
+            },
+            errorCallback: function(error) {
+                logError('Ошибка капчи', error);
+                hideLoadingOverlay();
+                showTemporaryStatus('❌ Ошибка проверки капчи', 'error');
+                isFormSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📨 Отправить отзыв';
             }
         });
+        logSuccess('Капча отрендерена, widgetId = ' + captchaWidgetId);
     }
 
     function handleFormSubmit(event) {
         event.preventDefault();
+        log('=== НАЧАЛО ОТПРАВКИ ФОРМЫ ===');
 
         if (isFormSubmitting) {
+            log('Отправка уже выполняется, блокируем повторную');
             showTemporaryStatus('⏳ Отправка уже выполняется, пожалуйста подождите', 'info');
             return;
         }
 
         if (!window.smartCaptcha || captchaWidgetId === null) {
+            logError('Капча не загружена');
             showTemporaryStatus('❌ Ошибка загрузки капчи, попробуйте позже', 'error');
             return;
         }
 
-        if (!validateRequiredFields()) return;
+        log('Валидируем обязательные поля...');
+        if (!validateRequiredFields()) {
+            logError('Валидация не пройдена');
+            return;
+        }
+        logSuccess('Валидация пройдена');
 
         isFormSubmitting = true;
         submitBtn.disabled = true;
         submitBtn.textContent = '⏳ Отправка...';
+        log('Кнопка заблокирована, показываем оверлей');
 
-        // Сначала показываем оверлей
         showLoadingOverlay();
         updateLoadingProgress(10, 'Проверка капчи...', 'Пожалуйста, подождите');
-
+        log('Запускаем выполнение капчи...');
+        
         window.smartCaptcha.execute(captchaWidgetId);
     }
 
     function validateRequiredFields() {
-        const region = document.getElementById('region').value;
-        const city = document.getElementById('city').value.trim();
-        const place = document.getElementById('place').value.trim();
-        const date = document.getElementById('date').value;
-        const taste = document.querySelector('input[name="taste"]:checked');
-        const appearance = document.querySelector('input[name="appearance"]:checked');
-        const fullness = document.querySelector('input[name="fullness"]:checked');
-        const variety = document.querySelector('input[name="variety"]:checked');
-        const packaging = document.querySelector('input[name="packaging"]:checked');
-        const leak = document.querySelector('input[name="leak"]:checked');
-        const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
-        const overall = document.querySelector('input[name="overall"]:checked');
-        const recommend = document.querySelector('input[name="recommend"]:checked');
+        log('Проверяем поля формы...');
+        const fields = {
+            region: document.getElementById('region').value,
+            city: document.getElementById('city').value.trim(),
+            place: document.getElementById('place').value.trim(),
+            date: document.getElementById('date').value,
+            taste: document.querySelector('input[name="taste"]:checked'),
+            appearance: document.querySelector('input[name="appearance"]:checked'),
+            fullness: document.querySelector('input[name="fullness"]:checked'),
+            variety: document.querySelector('input[name="variety"]:checked'),
+            packaging: document.querySelector('input[name="packaging"]:checked'),
+            leak: document.querySelector('input[name="leak"]:checked'),
+            labelInfo: document.querySelector('input[name="labelInfo"]:checked'),
+            overall: document.querySelector('input[name="overall"]:checked'),
+            recommend: document.querySelector('input[name="recommend"]:checked')
+        };
 
-        if (!region || !city || !place || !date || !taste || !appearance || !fullness || !variety || !packaging || !leak || !labelInfo || !overall || !recommend) {
+        const missing = [];
+        for (const [key, value] of Object.entries(fields)) {
+            if (!value) {
+                missing.push(key);
+                log(`Поле ${key} не заполнено`);
+            }
+        }
+
+        if (missing.length > 0) {
+            logError('Не заполнены поля: ' + missing.join(', '));
             showTemporaryStatus('❌ Пожалуйста, заполните все обязательные поля', 'error');
             return false;
         }
+        
+        logSuccess('Все поля заполнены');
         return true;
     }
 
     function showTemporaryStatus(message, type) {
+        log(`Показываем временный статус: [${type}] ${message}`);
         const statusDiv = document.getElementById('status');
         statusDiv.textContent = message;
         statusDiv.className = type;
@@ -656,6 +726,7 @@
     }
 
     function showPermanentSuccess(message, reviewNumber) {
+        logSuccess(`Успешная отправка! Номер отзыва: ${reviewNumber}`);
         const successDiv = document.getElementById('successMessage');
         successDiv.innerHTML = `
             <div class="success-permanent">
@@ -668,11 +739,13 @@
         document.getElementById('status').style.display = 'none';
     }
 
-    // Функции для UI загрузки
     function showLoadingOverlay() {
-        // Удаляем старый оверлей если есть
+        log('Показываем оверлей загрузки');
         const oldOverlay = document.getElementById('loadingOverlay');
-        if (oldOverlay) oldOverlay.remove();
+        if (oldOverlay) {
+            log('Удаляем старый оверлей');
+            oldOverlay.remove();
+        }
         
         const overlay = document.createElement('div');
         overlay.id = 'loadingOverlay';
@@ -691,9 +764,11 @@
             </div>
         `;
         document.body.appendChild(overlay);
+        log('Оверлей добавлен в DOM');
     }
 
     function updateLoadingProgress(percent, mainText, stepText) {
+        log(`Прогресс ${percent}%: ${mainText} - ${stepText || 'нет доп. инфо'}`);
         const progressFill = document.getElementById('progressFill');
         const mainTextEl = document.getElementById('loadingMainText');
         const stepTextEl = document.getElementById('loadingStepText');
@@ -704,25 +779,34 @@
     }
 
     function hideLoadingOverlay() {
+        log('Скрываем оверлей загрузки');
         const overlay = document.getElementById('loadingOverlay');
         if (overlay) {
             overlay.style.opacity = '0';
             overlay.style.transition = 'opacity 0.3s';
-            setTimeout(() => overlay.remove(), 300);
+            setTimeout(() => {
+                overlay.remove();
+                log('Оверлей удалён из DOM');
+            }, 300);
         }
     }
 
     const form = document.getElementById('feedbackForm');
     const submitBtn = document.getElementById('submitBtn');
+    
+    log('Инициализация формы', { form: !!form, submitBtn: !!submitBtn });
 
     async function compressImage(file) {
+        log(`Начинаем сжатие изображения: ${file.name}, размер: ${Math.round(file.size / 1024)} КБ`);
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = (e) => {
+                log('Файл прочитан, создаём изображение');
                 const img = new Image();
                 img.src = e.target.result;
                 img.onload = () => {
+                    log(`Исходные размеры: ${img.width}x${img.height}`);
                     updateLoadingProgress(30, 'Обработка фотографии...', 'Изменение размера и сжатие');
 
                     const canvas = document.createElement('canvas');
@@ -736,6 +820,8 @@
                         width = (width * maxDim) / height;
                         height = maxDim;
                     }
+                    
+                    log(`Новые размеры: ${width}x${height}`);
 
                     canvas.width = width;
                     canvas.height = height;
@@ -756,8 +842,11 @@
 
                         const dataUrl = canvas.toDataURL('image/jpeg', quality);
                         const fileSizeKB = Math.round((dataUrl.length * 3 / 4) / 1024);
+                        
+                        log(`Попытка ${attempts}: качество ${Math.round(quality*100)}%, размер ${fileSizeKB} КБ`);
 
                         if (fileSizeKB <= 500 || quality <= 0.2) {
+                            logSuccess(`Сжатие завершено: ${fileSizeKB} КБ`);
                             updateLoadingProgress(70, 'Фото готово', `Размер: ${fileSizeKB} КБ`);
                             resolve(dataUrl);
                         } else {
@@ -768,24 +857,34 @@
 
                     tryCompress();
                 };
-                img.onerror = reject;
+                img.onerror = (err) => {
+                    logError('Ошибка загрузки изображения', err);
+                    reject(err);
+                };
             };
-            reader.onerror = reject;
+            reader.onerror = (err) => {
+                logError('Ошибка чтения файла', err);
+                reject(err);
+            };
         });
     }
 
     document.getElementById('photo').addEventListener('change', (e) => {
         const file = e.target.files[0];
+        log('Выбран файл для фото', file ? { name: file.name, size: Math.round(file.size/1024) + ' КБ', type: file.type } : 'файл не выбран');
+        
         const preview = document.getElementById('preview');
         const label = document.querySelector('.file-upload-label');
         if (file) {
             if (!file.type.match('image.*')) {
+                logError('Выбранный файл не является изображением');
                 preview.innerHTML = '<p style="color: #e74c3c;">Пожалуйста, выберите изображение</p>';
                 return;
             }
             const reader = new FileReader();
             reader.onload = (ev) => {
                 preview.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
+                log('Превью загружено');
             };
             reader.readAsDataURL(file);
             label.style.background = '#e8efff';
@@ -796,9 +895,12 @@
     });
 
     async function submitFormToServer() {
+        log('=== НАЧАЛО ОТПРАВКИ НА СЕРВЕР ===');
+        
         try {
             updateLoadingProgress(20, 'Проверка данных...', 'Валидация полей формы');
 
+            log('Собираем данные формы...');
             const region = document.getElementById('region').value;
             const city = document.getElementById('city').value.trim();
             const place = document.getElementById('place').value.trim();
@@ -815,12 +917,23 @@
             const comment = document.getElementById('comment').value.trim();
             const photoFile = document.getElementById('photo').files[0];
 
+            log('Данные собраны', {
+                region, city, place, date,
+                taste: taste.value, appearance: appearance.value, fullness: fullness.value,
+                variety: variety.value, packaging: packaging.value, leak: leak.value,
+                labelInfo: labelInfo.value, overall: overall.value, recommend: recommend.value,
+                commentLength: comment.length,
+                hasPhoto: !!photoFile
+            });
+
             let photoBase64 = '';
             if (photoFile) {
                 updateLoadingProgress(25, 'Подготовка фотографии...', 'Начинаем сжатие');
                 try {
                     photoBase64 = await compressImage(photoFile);
+                    log(`Фото сжато, размер base64: ${Math.round(photoBase64.length / 1024)} КБ`);
                 } catch (err) {
+                    logError('Ошибка при сжатии фото', err);
                     hideLoadingOverlay();
                     showTemporaryStatus('❌ Ошибка при обработке фото', 'error');
                     isFormSubmitting = false;
@@ -844,24 +957,50 @@
                 overall: parseInt(overall.value),
                 recommend: recommend.value,
                 comment: comment || '',
-                photoBase64,
-                captchaToken: captchaToken
+                photoBase64: photoBase64 ? 'base64_data_present' : '',
+                captchaToken: captchaToken ? 'token_present' : ''
             };
 
+            log('Payload подготовлен (без base64 для читаемости)', payload);
+
             updateLoadingProgress(85, 'Отправка на сервер...', 'Ожидание ответа');
+            
+            const actualPayload = {
+                region, city, place, date,
+                taste: parseInt(taste.value),
+                appearance: parseInt(appearance.value),
+                fullness: parseInt(fullness.value),
+                variety: parseInt(variety.value),
+                packaging: parseInt(packaging.value),
+                leak: leak.value,
+                labelInfo: labelInfo.value,
+                overall: parseInt(overall.value),
+                recommend: recommend.value,
+                comment: comment || '',
+                photoBase64,
+                captchaToken
+            };
+
+            log('Отправляем POST запрос...');
+            const startTime = Date.now();
 
             const response = await fetch('https://d5d73semn2nofcs91jio.trruwy79.apigw.yandexcloud.net/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(actualPayload)
             });
+
+            const responseTime = Date.now() - startTime;
+            log(`Ответ получен за ${responseTime}ms, статус: ${response.status}`);
 
             updateLoadingProgress(95, 'Обработка ответа...', 'Получение результата');
 
             const result = await response.json();
+            log('Результат от сервера', result);
 
             if (response.ok && result.success) {
                 updateLoadingProgress(100, '✓ Успешно!', 'Отзыв сохранен');
+                logSuccess(`Отзыв успешно отправлен! Номер: ${result.reviewNumber}`);
 
                 await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -880,8 +1019,10 @@
                 captchaToken = '';
                 if (window.smartCaptcha && captchaWidgetId !== null) {
                     window.smartCaptcha.reset(captchaWidgetId);
+                    log('Капча сброшена');
                 }
             } else {
+                logError('Сервер вернул ошибку', result);
                 hideLoadingOverlay();
                 showTemporaryStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
 
@@ -897,7 +1038,7 @@
                 submitBtn.textContent = '📨 Отправить отзыв';
             }
         } catch (error) {
-            console.error('Ошибка:', error);
+            logError('Критическая ошибка при отправке', error);
             hideLoadingOverlay();
             showTemporaryStatus('❌ Ошибка соединения. Проверьте интернет и попробуйте снова', 'error');
 
@@ -908,6 +1049,7 @@
     }
 
     submitBtn.addEventListener('click', handleFormSubmit);
+    log('=== СТРАНИЦА ЗАГРУЖЕНА, ОЖИДАНИЕ ДЕЙСТВИЙ ===');
 </script>
 </body>
 
