@@ -576,49 +576,229 @@
     <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha"
         defer></script>
     <script>
-        let captchaWidgetId = null;
-        let captchaToken = '';
-        let isFormSubmitting = false;
+    let captchaWidgetId = null;
+    let captchaToken = '';
+    let isFormSubmitting = false;
 
-        function onloadSmartCaptcha() {
-            if (!window.smartCaptcha) return;
-            const container = document.getElementById('captcha-container');
-            captchaWidgetId = window.smartCaptcha.render(container, {
-                sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
-                invisible: true,
-                callback: function (token) {
-                    captchaToken = token;
-                    if (!isFormSubmitting) {
-                        isFormSubmitting = true;
-                        submitFormToServer();
-                    }
+    function onloadSmartCaptcha() {
+        if (!window.smartCaptcha) return;
+        const container = document.getElementById('captcha-container');
+        captchaWidgetId = window.smartCaptcha.render(container, {
+            sitekey: 'ysc1_rfOeubnmapuuNE4lVXQzugg4YJN8uSICvmVSkWhk0bca7dba',
+            invisible: true,
+            callback: function (token) {
+                captchaToken = token;
+                if (isFormSubmitting) {
+                    submitFormToServer();
                 }
-            });
+            }
+        });
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        if (isFormSubmitting) {
+            showTemporaryStatus('⏳ Отправка уже выполняется, пожалуйста подождите', 'info');
+            return;
         }
 
-        function handleFormSubmit(event) {
-            event.preventDefault();
-
-            if (isFormSubmitting) {
-                showTemporaryStatus('⏳ Отправка уже выполняется, пожалуйста подождите', 'info');
-                return;
-            }
-
-            if (!window.smartCaptcha || captchaWidgetId === null) {
-                showTemporaryStatus('❌ Ошибка загрузки капчи, попробуйте позже', 'error');
-                return;
-            }
-
-            if (!validateRequiredFields()) return;
-
-            isFormSubmitting = true;
-            submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Отправка...';
-
-            window.smartCaptcha.execute(captchaWidgetId);
+        if (!window.smartCaptcha || captchaWidgetId === null) {
+            showTemporaryStatus('❌ Ошибка загрузки капчи, попробуйте позже', 'error');
+            return;
         }
 
-        function validateRequiredFields() {
+        if (!validateRequiredFields()) return;
+
+        isFormSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Отправка...';
+
+        // Сначала показываем оверлей
+        showLoadingOverlay();
+        updateLoadingProgress(10, 'Проверка капчи...', 'Пожалуйста, подождите');
+
+        window.smartCaptcha.execute(captchaWidgetId);
+    }
+
+    function validateRequiredFields() {
+        const region = document.getElementById('region').value;
+        const city = document.getElementById('city').value.trim();
+        const place = document.getElementById('place').value.trim();
+        const date = document.getElementById('date').value;
+        const taste = document.querySelector('input[name="taste"]:checked');
+        const appearance = document.querySelector('input[name="appearance"]:checked');
+        const fullness = document.querySelector('input[name="fullness"]:checked');
+        const variety = document.querySelector('input[name="variety"]:checked');
+        const packaging = document.querySelector('input[name="packaging"]:checked');
+        const leak = document.querySelector('input[name="leak"]:checked');
+        const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
+        const overall = document.querySelector('input[name="overall"]:checked');
+        const recommend = document.querySelector('input[name="recommend"]:checked');
+
+        if (!region || !city || !place || !date || !taste || !appearance || !fullness || !variety || !packaging || !leak || !labelInfo || !overall || !recommend) {
+            showTemporaryStatus('❌ Пожалуйста, заполните все обязательные поля', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    function showTemporaryStatus(message, type) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = message;
+        statusDiv.className = type;
+        statusDiv.style.display = 'block';
+        setTimeout(() => {
+            if (statusDiv.style.display !== 'none') {
+                statusDiv.style.display = 'none';
+            }
+        }, 5000);
+    }
+
+    function showPermanentSuccess(message, reviewNumber) {
+        const successDiv = document.getElementById('successMessage');
+        successDiv.innerHTML = `
+            <div class="success-permanent">
+                ✅ ${message}<br>
+                <strong style="font-size: 18px;">Ваш номер отзыва: ${reviewNumber}</strong><br>
+                <small style="display: block; margin-top: 8px;">Спасибо за обратную связь! Страницу можно обновить для нового отзыва.</small>
+            </div>
+        `;
+        successDiv.style.display = 'block';
+        document.getElementById('status').style.display = 'none';
+    }
+
+    // Функции для UI загрузки
+    function showLoadingOverlay() {
+        // Удаляем старый оверлей если есть
+        const oldOverlay = document.getElementById('loadingOverlay');
+        if (oldOverlay) oldOverlay.remove();
+        
+        const overlay = document.createElement('div');
+        overlay.id = 'loadingOverlay';
+        overlay.className = 'loading-overlay';
+        overlay.innerHTML = `
+            <div class="loading-card">
+                <div class="spinner"></div>
+                <div class="loading-text" id="loadingMainText">Подготовка данных...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="loading-step" id="loadingStepText"></div>
+                <div style="margin-top: 20px; color: #999; font-size: 12px;">
+                    Пожалуйста, не закрывайте страницу
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+
+    function updateLoadingProgress(percent, mainText, stepText) {
+        const progressFill = document.getElementById('progressFill');
+        const mainTextEl = document.getElementById('loadingMainText');
+        const stepTextEl = document.getElementById('loadingStepText');
+
+        if (progressFill) progressFill.style.width = `${percent}%`;
+        if (mainTextEl && mainText) mainTextEl.textContent = mainText;
+        if (stepTextEl && stepText) stepTextEl.textContent = stepText;
+    }
+
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.3s';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    async function compressImage(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    updateLoadingProgress(30, 'Обработка фотографии...', 'Изменение размера и сжатие');
+
+                    const canvas = document.createElement('canvas');
+                    let width = img.width, height = img.height;
+                    const maxDim = 1024;
+
+                    if (width > height && width > maxDim) {
+                        height = (height * maxDim) / width;
+                        width = maxDim;
+                    } else if (height > maxDim) {
+                        width = (width * maxDim) / height;
+                        height = maxDim;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let quality = 0.9;
+                    let attempts = 0;
+
+                    const tryCompress = () => {
+                        attempts++;
+                        const progress = 30 + (attempts * 10);
+                        updateLoadingProgress(
+                            Math.min(progress, 60),
+                            'Оптимизация изображения...',
+                            `Попытка ${attempts}, качество: ${Math.round(quality * 100)}%`
+                        );
+
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        const fileSizeKB = Math.round((dataUrl.length * 3 / 4) / 1024);
+
+                        if (fileSizeKB <= 500 || quality <= 0.2) {
+                            updateLoadingProgress(70, 'Фото готово', `Размер: ${fileSizeKB} КБ`);
+                            resolve(dataUrl);
+                        } else {
+                            quality -= 0.1;
+                            setTimeout(tryCompress, 50);
+                        }
+                    };
+
+                    tryCompress();
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
+        });
+    }
+
+    document.getElementById('photo').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const preview = document.getElementById('preview');
+        const label = document.querySelector('.file-upload-label');
+        if (file) {
+            if (!file.type.match('image.*')) {
+                preview.innerHTML = '<p style="color: #e74c3c;">Пожалуйста, выберите изображение</p>';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
+            };
+            reader.readAsDataURL(file);
+            label.style.background = '#e8efff';
+        } else {
+            preview.innerHTML = '';
+            label.style.background = '#f0f4ff';
+        }
+    });
+
+    async function submitFormToServer() {
+        try {
+            updateLoadingProgress(20, 'Проверка данных...', 'Валидация полей формы');
+
             const region = document.getElementById('region').value;
             const city = document.getElementById('city').value.trim();
             const place = document.getElementById('place').value.trim();
@@ -632,277 +812,103 @@
             const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
             const overall = document.querySelector('input[name="overall"]:checked');
             const recommend = document.querySelector('input[name="recommend"]:checked');
+            const comment = document.getElementById('comment').value.trim();
+            const photoFile = document.getElementById('photo').files[0];
 
-            if (!region || !city || !place || !date || !taste || !appearance || !fullness || !variety || !packaging || !leak || !labelInfo || !overall || !recommend) {
-                showTemporaryStatus('❌ Пожалуйста, заполните все обязательные поля', 'error');
-                return false;
-            }
-            return true;
-        }
-
-        function showTemporaryStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = type;
-            statusDiv.style.display = 'block';
-            setTimeout(() => {
-                if (statusDiv.style.display !== 'none') {
-                    statusDiv.style.display = 'none';
-                }
-            }, 5000);
-        }
-
-        function showPermanentSuccess(message, reviewNumber) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.innerHTML = `
-                <div class="success-permanent">
-                    ✅ ${message}<br>
-                    <strong style="font-size: 18px;">Ваш номер отзыва: ${reviewNumber}</strong><br>
-                    <small style="display: block; margin-top: 8px;">Спасибо за обратную связь! Страницу можно обновить для нового отзыва.</small>
-                </div>
-            `;
-            successDiv.style.display = 'block';
-            document.getElementById('status').style.display = 'none';
-        }
-
-        // Функции для UI загрузки
-        function showLoadingOverlay() {
-            const overlay = document.createElement('div');
-            overlay.id = 'loadingOverlay';
-            overlay.className = 'loading-overlay';
-            overlay.innerHTML = `
-                <div class="loading-card">
-                    <div class="spinner"></div>
-                    <div class="loading-text" id="loadingMainText">Подготовка данных...</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <div class="loading-step" id="loadingStepText"></div>
-                    <div style="margin-top: 20px; color: #999; font-size: 12px;">
-                        Пожалуйста, не закрывайте страницу
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-        }
-
-        function updateLoadingProgress(percent, mainText, stepText) {
-            const progressFill = document.getElementById('progressFill');
-            const mainTextEl = document.getElementById('loadingMainText');
-            const stepTextEl = document.getElementById('loadingStepText');
-
-            if (progressFill) progressFill.style.width = `${percent}%`;
-            if (mainTextEl && mainText) mainTextEl.textContent = mainText;
-            if (stepTextEl && stepText) stepTextEl.textContent = stepText;
-        }
-
-        function hideLoadingOverlay() {
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.style.opacity = '0';
-                overlay.style.transition = 'opacity 0.3s';
-                setTimeout(() => overlay.remove(), 300);
-            }
-        }
-
-        const form = document.getElementById('feedbackForm');
-        const submitBtn = document.getElementById('submitBtn');
-
-        async function compressImage(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        updateLoadingProgress(30, 'Обработка фотографии...', 'Изменение размера и сжатие');
-
-                        const canvas = document.createElement('canvas');
-                        let width = img.width, height = img.height;
-                        const maxDim = 1024;
-
-                        if (width > height && width > maxDim) {
-                            height = (height * maxDim) / width;
-                            width = maxDim;
-                        } else if (height > maxDim) {
-                            width = (width * maxDim) / height;
-                            height = maxDim;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        let quality = 0.9;
-                        let attempts = 0;
-
-                        const tryCompress = () => {
-                            attempts++;
-                            const progress = 30 + (attempts * 10);
-                            updateLoadingProgress(
-                                Math.min(progress, 60),
-                                'Оптимизация изображения...',
-                                `Попытка ${attempts}, качество: ${Math.round(quality * 100)}%`
-                            );
-
-                            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                            const fileSizeKB = Math.round((dataUrl.length * 3 / 4) / 1024);
-
-                            if (fileSizeKB <= 500 || quality <= 0.2) {
-                                updateLoadingProgress(70, 'Фото готово', `Размер: ${fileSizeKB} КБ`);
-                                resolve(dataUrl);
-                            } else {
-                                quality -= 0.1;
-                                setTimeout(tryCompress, 50);
-                            }
-                        };
-
-                        tryCompress();
-                    };
-                    img.onerror = reject;
-                };
-                reader.onerror = reject;
-            });
-        }
-
-        document.getElementById('photo').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            const preview = document.getElementById('preview');
-            const label = document.querySelector('.file-upload-label');
-            if (file) {
-                if (!file.type.match('image.*')) {
-                    preview.innerHTML = '<p style="color: #e74c3c;">Пожалуйста, выберите изображение</p>';
+            let photoBase64 = '';
+            if (photoFile) {
+                updateLoadingProgress(25, 'Подготовка фотографии...', 'Начинаем сжатие');
+                try {
+                    photoBase64 = await compressImage(photoFile);
+                } catch (err) {
+                    hideLoadingOverlay();
+                    showTemporaryStatus('❌ Ошибка при обработке фото', 'error');
+                    isFormSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '📨 Отправить отзыв';
                     return;
                 }
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    preview.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
-                };
-                reader.readAsDataURL(file);
-                label.style.background = '#e8efff';
-            } else {
-                preview.innerHTML = '';
-                label.style.background = '#f0f4ff';
             }
-        });
 
-        async function submitFormToServer() {
-            showLoadingOverlay();
-            updateLoadingProgress(10, 'Проверка данных...', 'Валидация полей формы');
+            updateLoadingProgress(75, 'Формирование запроса...', 'Подготовка данных к отправке');
 
-            try {
-                const region = document.getElementById('region').value;
-                const city = document.getElementById('city').value.trim();
-                const place = document.getElementById('place').value.trim();
-                const date = document.getElementById('date').value;
-                const taste = document.querySelector('input[name="taste"]:checked');
-                const appearance = document.querySelector('input[name="appearance"]:checked');
-                const fullness = document.querySelector('input[name="fullness"]:checked');
-                const variety = document.querySelector('input[name="variety"]:checked');
-                const packaging = document.querySelector('input[name="packaging"]:checked');
-                const leak = document.querySelector('input[name="leak"]:checked');
-                const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
-                const overall = document.querySelector('input[name="overall"]:checked');
-                const recommend = document.querySelector('input[name="recommend"]:checked');
-                const comment = document.getElementById('comment').value.trim();
-                const photoFile = document.getElementById('photo').files[0];
+            const payload = {
+                region, city, place, date,
+                taste: parseInt(taste.value),
+                appearance: parseInt(appearance.value),
+                fullness: parseInt(fullness.value),
+                variety: parseInt(variety.value),
+                packaging: parseInt(packaging.value),
+                leak: leak.value,
+                labelInfo: labelInfo.value,
+                overall: parseInt(overall.value),
+                recommend: recommend.value,
+                comment: comment || '',
+                photoBase64,
+                captchaToken: captchaToken
+            };
 
-                let photoBase64 = '';
-                if (photoFile) {
-                    updateLoadingProgress(20, 'Подготовка фотографии...', 'Начинаем сжатие');
-                    try {
-                        photoBase64 = await compressImage(photoFile);
-                    } catch (err) {
-                        hideLoadingOverlay();
-                        showTemporaryStatus('❌ Ошибка при обработке фото', 'error');
-                        isFormSubmitting = false;
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = '📨 Отправить отзыв';
-                        return;
-                    }
+            updateLoadingProgress(85, 'Отправка на сервер...', 'Ожидание ответа');
+
+            const response = await fetch('https://d5d73semn2nofcs91jio.trruwy79.apigw.yandexcloud.net/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            updateLoadingProgress(95, 'Обработка ответа...', 'Получение результата');
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                updateLoadingProgress(100, '✓ Успешно!', 'Отзыв сохранен');
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                hideLoadingOverlay();
+
+                const reviewNumber = result.reviewNumber || '—';
+                showPermanentSuccess('Спасибо! Ваш отзыв успешно отправлен', reviewNumber);
+
+                form.reset();
+                document.getElementById('preview').innerHTML = '';
+                document.querySelector('.file-upload-label').style.background = '#f0f4ff';
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '✓ Отправлено';
+
+                captchaToken = '';
+                if (window.smartCaptcha && captchaWidgetId !== null) {
+                    window.smartCaptcha.reset(captchaWidgetId);
                 }
+            } else {
+                hideLoadingOverlay();
+                showTemporaryStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
 
-                updateLoadingProgress(75, 'Формирование запроса...', 'Подготовка данных к отправке');
-
-                const payload = {
-                    region, city, place, date,
-                    taste: parseInt(taste.value),
-                    appearance: parseInt(appearance.value),
-                    fullness: parseInt(fullness.value),
-                    variety: parseInt(variety.value),
-                    packaging: parseInt(packaging.value),
-                    leak: leak.value,
-                    labelInfo: labelInfo.value,
-                    overall: parseInt(overall.value),
-                    recommend: recommend.value,
-                    comment: comment || '',
-                    photoBase64,
-                    captchaToken: captchaToken
-                };
-
-                updateLoadingProgress(85, 'Отправка на сервер...', 'Ожидание ответа');
-
-                const response = await fetch('https://d5d73semn2nofcs91jio.trruwy79.apigw.yandexcloud.net/feedback', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                updateLoadingProgress(95, 'Обработка ответа...', 'Получение результата');
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    updateLoadingProgress(100, '✓ Успешно!', 'Отзыв сохранен');
-
-                    await new Promise(resolve => setTimeout(resolve, 500));
-
-                    hideLoadingOverlay();
-
-                    const reviewNumber = result.reviewNumber || '—';
-                    showPermanentSuccess('Спасибо! Ваш отзыв успешно отправлен', reviewNumber);
-
-                    form.reset();
-                    document.getElementById('preview').innerHTML = '';
-                    document.querySelector('.file-upload-label').style.background = '#f0f4ff';
-
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = '✓ Отправлено';
-
+                if (result.error === 'Captcha verification failed') {
                     captchaToken = '';
                     if (window.smartCaptcha && captchaWidgetId !== null) {
                         window.smartCaptcha.reset(captchaWidgetId);
                     }
-                } else {
-                    hideLoadingOverlay();
-                    showTemporaryStatus(`❌ Ошибка: ${result.error || 'Не удалось отправить отзыв'}`, 'error');
-
-                    if (result.error === 'Captcha verification failed') {
-                        captchaToken = '';
-                        if (window.smartCaptcha && captchaWidgetId !== null) {
-                            window.smartCaptcha.reset(captchaWidgetId);
-                        }
-                    }
-
-                    isFormSubmitting = false;
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = '📨 Отправить отзыв';
                 }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                hideLoadingOverlay();
-                showTemporaryStatus('❌ Ошибка соединения. Проверьте интернет и попробуйте снова', 'error');
 
                 isFormSubmitting = false;
                 submitBtn.disabled = false;
                 submitBtn.textContent = '📨 Отправить отзыв';
             }
-        }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            hideLoadingOverlay();
+            showTemporaryStatus('❌ Ошибка соединения. Проверьте интернет и попробуйте снова', 'error');
 
-        submitBtn.addEventListener('click', handleFormSubmit);
-    </script>
+            isFormSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = '📨 Отправить отзыв';
+        }
+    }
+
+    submitBtn.addEventListener('click', handleFormSubmit);
+</script>
 </body>
 
 </html>
