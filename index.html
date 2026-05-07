@@ -426,7 +426,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Оцените качество обеда (отсутствие инородных предметов, внешний вид)? <span class="required">*</span></label>
+                    <label>Оцените качество обедов (отсутствие инородных предметов, внешний вид)? <span class="required">*</span></label>
                     <div class="rating-group">
                         <div class="rating-option"><input type="radio" name="appearance" id="appearance1"
                                 value="1"><label for="appearance1">1</label></div>
@@ -499,6 +499,34 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Доставка обеда происходит своевременно? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <div class="radio-option"><input type="radio" name="deliveryTime" id="deliveryTime1" value="Да"><label
+                                for="deliveryTime1">Да</label></div>
+                        <div class="radio-option"><input type="radio" name="deliveryTime" id="deliveryTime2"
+                                value="Нет"><label for="deliveryTime2">Нет</label></div>
+                        <div class="radio-option"><input type="radio" name="deliveryTime" id="deliveryTime3"
+                                value="Каждый раз по разному"><label for="deliveryTime3">Каждый раз по разному</label></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Оцените сервис обслуживания со стороны поставщика? <span class="required">*</span></label>
+                    <div class="rating-group">
+                        <div class="rating-option"><input type="radio" name="serviceRating" id="serviceRating1" value="1"><label
+                                for="serviceRating1">1</label></div>
+                        <div class="rating-option"><input type="radio" name="serviceRating" id="serviceRating2" value="2"><label
+                                for="serviceRating2">2</label></div>
+                        <div class="rating-option"><input type="radio" name="serviceRating" id="serviceRating3" value="3"><label
+                                for="serviceRating3">3</label></div>
+                        <div class="rating-option"><input type="radio" name="serviceRating" id="serviceRating4" value="4"><label
+                                for="serviceRating4">4</label></div>
+                        <div class="rating-option"><input type="radio" name="serviceRating" id="serviceRating5" value="5"><label
+                                for="serviceRating5">5</label></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>Ваше общее впечатление от программы корпоративного питания в целом? <span
                             class="required">*</span></label>
                     <div class="rating-group">
@@ -548,7 +576,6 @@
     <script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=onloadSmartCaptcha"
         defer></script>
     <script>
-    // Включаем подробное логирование
     const DEBUG = true;
     
     function log(message, data = null) {
@@ -661,6 +688,8 @@
             packaging: document.querySelector('input[name="packaging"]:checked'),
             leak: document.querySelector('input[name="leak"]:checked'),
             labelInfo: document.querySelector('input[name="labelInfo"]:checked'),
+            deliveryTime: document.querySelector('input[name="deliveryTime"]:checked'),
+            serviceRating: document.querySelector('input[name="serviceRating"]:checked'),
             overall: document.querySelector('input[name="overall"]:checked'),
         };
 
@@ -881,6 +910,8 @@
             const packaging = document.querySelector('input[name="packaging"]:checked');
             const leak = document.querySelector('input[name="leak"]:checked');
             const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
+            const deliveryTime = document.querySelector('input[name="deliveryTime"]:checked');
+            const serviceRating = document.querySelector('input[name="serviceRating"]:checked');
             const overall = document.querySelector('input[name="overall"]:checked');
             const comment = document.getElementById('comment').value.trim();
             const photoFile = document.getElementById('photo').files[0];
@@ -889,7 +920,8 @@
                 region, city, place, date,
                 taste: taste.value, appearance: appearance.value,
                 variety: variety.value, packaging: packaging.value, leak: leak.value,
-                labelInfo: labelInfo.value, overall: overall.value,
+                labelInfo: labelInfo.value, deliveryTime: deliveryTime.value,
+                serviceRating: serviceRating.value, overall: overall.value,
                 commentLength: comment.length,
                 hasPhoto: !!photoFile
             });
@@ -921,6 +953,8 @@
                 packaging: parseInt(packaging.value),
                 leak: leak.value,
                 labelInfo: labelInfo.value,
+                deliveryTime: deliveryTime.value,
+                serviceRating: parseInt(serviceRating.value),
                 overall: parseInt(overall.value),
                 comment: comment || '',
                 photoBase64: photoBase64 ? 'base64_data_present' : '',
@@ -939,6 +973,8 @@
                 packaging: parseInt(packaging.value),
                 leak: leak.value,
                 labelInfo: labelInfo.value,
+                deliveryTime: deliveryTime.value,
+                serviceRating: parseInt(serviceRating.value),
                 overall: parseInt(overall.value),
                 comment: comment || '',
                 photoBase64,
