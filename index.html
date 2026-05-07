@@ -442,22 +442,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Насколько вы были сыты? <span class="required">*</span></label>
-                    <div class="rating-group">
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness1" value="1"><label
-                                for="fullness1">1 - Совсем не наелся</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness2" value="2"><label
-                                for="fullness2">2 - Еле-еле</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness3" value="3"><label
-                                for="fullness3">3 - Нормально</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness4" value="4"><label
-                                for="fullness4">4 - Сыт</label></div>
-                        <div class="rating-option"><input type="radio" name="fullness" id="fullness5" value="5"><label
-                                for="fullness5">5 - Объема было более чем достаточно</label></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label>Оцените разнообразие меню? <span class="required">*</span></label>
                     <div class="rating-group">
                         <div class="rating-option"><input type="radio" name="variety" id="variety1" value="1"><label
@@ -528,18 +512,6 @@
                                 for="overall4">4</label></div>
                         <div class="rating-option"><input type="radio" name="overall" id="overall5" value="5"><label
                                 for="overall5">5</label></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Порекомендовали бы вы это питание коллеге? <span class="required">*</span></label>
-                    <div class="radio-group">
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend1" value="Да"><label
-                                for="recommend1">Да</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend2"
-                                value="Нет"><label for="recommend2">Нет</label></div>
-                        <div class="radio-option"><input type="radio" name="recommend" id="recommend3"
-                                value="Затрудняюсь"><label for="recommend3">Затрудняюсь</label></div>
                     </div>
                 </div>
 
@@ -685,13 +657,11 @@
             date: document.getElementById('date').value,
             taste: document.querySelector('input[name="taste"]:checked'),
             appearance: document.querySelector('input[name="appearance"]:checked'),
-            fullness: document.querySelector('input[name="fullness"]:checked'),
             variety: document.querySelector('input[name="variety"]:checked'),
             packaging: document.querySelector('input[name="packaging"]:checked'),
             leak: document.querySelector('input[name="leak"]:checked'),
             labelInfo: document.querySelector('input[name="labelInfo"]:checked'),
             overall: document.querySelector('input[name="overall"]:checked'),
-            recommend: document.querySelector('input[name="recommend"]:checked')
         };
 
         const missing = [];
@@ -907,21 +877,19 @@
             const date = document.getElementById('date').value;
             const taste = document.querySelector('input[name="taste"]:checked');
             const appearance = document.querySelector('input[name="appearance"]:checked');
-            const fullness = document.querySelector('input[name="fullness"]:checked');
             const variety = document.querySelector('input[name="variety"]:checked');
             const packaging = document.querySelector('input[name="packaging"]:checked');
             const leak = document.querySelector('input[name="leak"]:checked');
             const labelInfo = document.querySelector('input[name="labelInfo"]:checked');
             const overall = document.querySelector('input[name="overall"]:checked');
-            const recommend = document.querySelector('input[name="recommend"]:checked');
             const comment = document.getElementById('comment').value.trim();
             const photoFile = document.getElementById('photo').files[0];
 
             log('Данные собраны', {
                 region, city, place, date,
-                taste: taste.value, appearance: appearance.value, fullness: fullness.value,
+                taste: taste.value, appearance: appearance.value,
                 variety: variety.value, packaging: packaging.value, leak: leak.value,
-                labelInfo: labelInfo.value, overall: overall.value, recommend: recommend.value,
+                labelInfo: labelInfo.value, overall: overall.value,
                 commentLength: comment.length,
                 hasPhoto: !!photoFile
             });
@@ -949,13 +917,11 @@
                 region, city, place, date,
                 taste: parseInt(taste.value),
                 appearance: parseInt(appearance.value),
-                fullness: parseInt(fullness.value),
                 variety: parseInt(variety.value),
                 packaging: parseInt(packaging.value),
                 leak: leak.value,
                 labelInfo: labelInfo.value,
                 overall: parseInt(overall.value),
-                recommend: recommend.value,
                 comment: comment || '',
                 photoBase64: photoBase64 ? 'base64_data_present' : '',
                 captchaToken: captchaToken ? 'token_present' : ''
@@ -969,13 +935,11 @@
                 region, city, place, date,
                 taste: parseInt(taste.value),
                 appearance: parseInt(appearance.value),
-                fullness: parseInt(fullness.value),
                 variety: parseInt(variety.value),
                 packaging: parseInt(packaging.value),
                 leak: leak.value,
                 labelInfo: labelInfo.value,
                 overall: parseInt(overall.value),
-                recommend: recommend.value,
                 comment: comment || '',
                 photoBase64,
                 captchaToken
